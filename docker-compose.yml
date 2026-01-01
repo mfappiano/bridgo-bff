@@ -1,0 +1,21 @@
+version: '3.7'
+services:
+  server:
+    container_name: 'server'
+    build:
+      context: '.'
+      dockerfile: './Dockerfile'
+    environment:
+      - NODE_ENV='stg'
+      - PORT=8080
+      - REDIS_URL='redis://127.0.0.1:6379'
+      - ENABLED_PINO_PRETTY='disabled'
+      - ENABLED_REQ_RES_LOG='false'
+      - NR_COMPANY_NAME='ueno'
+      - NR_SQUAD_NAME='prestamos'
+      - NR_SQUAD_NAME='asistidos'
+      - NR_LOGGING_LEVEL='info'
+      - NR_LICENSE_KEY='example_license_key'
+      - NEW_RELIC_APP_NAME='NEW_RELIC_APP_NAMEEE'
+    ports:
+      - '8080:8080'
