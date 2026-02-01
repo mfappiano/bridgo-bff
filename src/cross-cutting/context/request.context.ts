@@ -6,6 +6,7 @@ declare module '@fastify/request-context' {
   interface RequestContextData extends FastifyRequest {
     id: string;
     logger: FastifyBaseLogger;
+    authToken?: string;
   }
 }
 
@@ -23,5 +24,6 @@ export const getContext = () => {
   return {
     id: requestContext.get('id')!,
     logger: requestContext.get('logger')!,
+    authToken: requestContext.get('authToken'),
   };
 };

@@ -14,5 +14,9 @@ export const AppConfig = z.object({
   logLevel: z.enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace', 'silent']).default('info'),
   logPretty: z.boolean().default(false),
   newRelicLicenseKey: z.string().optional(),
+  jwtSecret: z.string().optional(),
+  jwtPublicKey: z.string().optional(),
+  jwtAlgorithms: z.string().default('HS256'),
+  authCookieName: z.string().default('auth_token'),
 });
 export type AppConfig = z.infer<typeof AppConfig>;

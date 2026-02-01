@@ -1,5 +1,10 @@
 import {FastifyInstance} from 'fastify';
-import {healthSchemas, professionalSearchSchemas, roleSearchSchemas,} from '~/api/index';
+import {
+    healthSchemas,
+    professionalSearchSchemas,
+    roleSearchSchemas,
+    authSchemas,
+} from '~/api/index';
 
 /**
  * Se encarga de registrar todos los schemas de la aplicacion
@@ -13,7 +18,8 @@ export const initSchemas = async (app: FastifyInstance) => {
     const schemas = [
         ...healthSchemas,
         ...roleSearchSchemas,
-        ...professionalSearchSchemas
+        ...professionalSearchSchemas,
+        ...authSchemas,
     ];
     for (const schema of schemas) {
         app.addSchema(schema);
