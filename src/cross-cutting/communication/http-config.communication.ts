@@ -19,6 +19,9 @@ export const agentHttpsConfig = {
 export const logRequestInterceptor = (config: InternalAxiosRequestConfig) => {
   const requestContext = getContext();
   config.headers.set('correlation_id', requestContext.id);
+  if (requestContext.authToken) {
+    config.headers.set('Authorization', `Bearer ${requestContext.authToken}`);
+  }
 
   requestContext.logger.debug(
     'Llamando a servicio... %s %s %o',

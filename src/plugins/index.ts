@@ -10,15 +10,24 @@ import cachePlugin from './cache.plugin';
 import { version } from '../../package.json';
 import cors from '@fastify/cors';
 import config from '~/cross-cutting/config';
+import { authPreHandler } from '~/middlewares/auth.middleware';
 
 const servers: ServerType[] = [];
 
 export function initPlugins(app: FastifyInstance) {
-  app.register(cors, { origin: config.corsOrigins.split(',') });
+  const corsOrigins = config.corsOrigins
+    .split(',')
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+  app.register(cors, {
+    origin: corsOrigins.length === 0 ? false : corsOrigins,
+    credentials: true,
+  });
   app.register(fastifyRequestContext, initContext());
   app.register(cookie, {} as FastifyCookieOptions);
   app.register(fastifyMultipart, { attachFieldsToBody: true });
   app.register(cachePlugin, { cacheStrategy: 'lru', opts: { max: 100, ttl: 10000 } });
+  app.addHook('preHandler', authPreHandler);
 
   app.register(fastifySwagger, {
     openapi: {
