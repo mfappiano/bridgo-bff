@@ -9,6 +9,11 @@ import {FastifyInstance} from 'fastify';
 import config from '~/cross-cutting/config';
 import {AxiosError, HttpStatusCode} from 'axios';
 import {ProfessionalSearch} from '~/modules/professional/domain/ProfessionalSearch';
+import type {
+    ProfessionalInviteAcceptRequestType,
+    ProfessionalInviteCreateRequestType,
+    ProfessionalInviteResponseType,
+} from '~/api';
 
 @Service()
 export class ProfessionalRepository implements IProfessionalRepository {
@@ -55,5 +60,47 @@ export class ProfessionalRepository implements IProfessionalRepository {
             logger.error('Error searching professionals', error);
             throw error;
         }
+    }
+
+    async createInvite(
+        payload: ProfessionalInviteCreateRequestType
+    ): Promise<ProfessionalInviteResponseType> {
+        const logger = this.app.log.child({
+            module: 'ProfessionalRepository.createInvite',
+        });
+
+        logger.debug('Creating professional invite');
+        const { data } = await this.httpClient.post(
+            `${this.baseUrl}/invites`,
+            payload
+        );
+        return data as ProfessionalInviteResponseType;
+    }
+
+    async validateInvite(token: string): Promise<ProfessionalInviteResponseType> {
+        const logger = this.app.log.child({
+            module: 'ProfessionalRepository.validateInvite',
+        });
+
+        logger.debug('Validating professional invite');
+        const { data } = await this.httpClient.get(
+            `${this.baseUrl}/invites/${token}`
+        );
+        return data as ProfessionalInviteResponseType;
+    }
+
+    async acceptInvite(
+        payload: ProfessionalInviteAcceptRequestType
+    ): Promise<ProfessionalInviteResponseType> {
+        const logger = this.app.log.child({
+            module: 'ProfessionalRepository.acceptInvite',
+        });
+
+        logger.debug('Accepting professional invite');
+        const { data } = await this.httpClient.post(
+            `${this.baseUrl}/invites/accept`,
+            payload
+        );
+        return data as ProfessionalInviteResponseType;
     }
 }

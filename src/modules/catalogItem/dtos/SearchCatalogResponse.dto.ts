@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const SearchRolesResponseSchema = z.object({
+export const SearchCatalogResponseSchema = z.object({
     items: z.array(
         z.object({
             id: z.string(),
@@ -9,4 +9,4 @@ export const SearchRolesResponseSchema = z.object({
     ),
 });
 
-export type SearchRolesResponseDto = z.infer<typeof SearchRolesResponseSchema>;
+export type SearchCatalogResponseDto = z.infer<typeof SearchCatalogResponseSchema>;

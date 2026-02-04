@@ -2,7 +2,7 @@ import {FastifyInstance} from 'fastify';
 import {
     healthSchemas,
     professionalSearchSchemas,
-    roleSearchSchemas,
+    catalogSearchByCategorySchemas,
     authSchemas,
 } from '~/api/index';
 
@@ -17,7 +17,7 @@ import {
 export const initSchemas = async (app: FastifyInstance) => {
     const schemas = [
         ...healthSchemas,
-        ...roleSearchSchemas,
+        ...catalogSearchByCategorySchemas,
         ...professionalSearchSchemas,
         ...authSchemas,
     ];
