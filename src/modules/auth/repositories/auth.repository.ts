@@ -50,7 +50,7 @@ export class AuthRepository {
 
   async listRoles() {
     const logger = this.app.log.child({ module: 'AuthRepository.listRoles' });
-    logger.debug('Listando roles');
+    logger.debug('Listando catalogs');
     const { data } = await this.httpClient.get(`${this.baseUrl}/roles`);
     return data;
   }

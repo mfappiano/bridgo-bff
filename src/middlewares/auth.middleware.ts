@@ -203,12 +203,12 @@ export const authPreHandler = async (
   requestContext.set('authToken', token);
 
   const urlPath = normalizePath(request.url.split('?')[0]);
-  if (urlPath.startsWith('/auth/roles')) {
+  if (urlPath.startsWith('/auth/catalogs')) {
     const hasAdminRole = roles.some((role) => ADMIN_ROLES.has(role));
     if (!hasAdminRole) {
       throw new ApiError(
         ErrorKeys.CUSTOM_ERROR,
-        'No autorizado para administrar roles',
+        'No autorizado para administrar catalogs',
         StatusCodes.FORBIDDEN,
       );
     }

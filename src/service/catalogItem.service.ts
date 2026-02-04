@@ -1,11 +1,11 @@
 import {FastifyInstanceToken, Inject, Service} from 'fastify-decorators';
 import {FastifyInstance} from 'fastify';
-import {SearchRolesRequestDto} from '~/modules/catalogItem/dtos/SearchRolesRequest.dto';
+import {SearchCatalogRequestDto} from '~/modules/catalogItem/dtos/SearchCatalogRequest.dto';
 import CacheManager from '~/cross-cutting/caching/cache-strategy.caching';
 import {CatalogItemRepository} from "~/modules/catalogItem/repositories/catalogItem.repository";
 
 @Service()
-export class CatalogItemService {
+    export class CatalogItemService {
     @Inject(CatalogItemRepository)
     private readonly catalogItemRepository: CatalogItemRepository;
 
@@ -20,8 +20,8 @@ export class CatalogItemService {
         return this.app.cache;
     }
 
-    async searchRole(input: SearchRolesRequestDto): Promise<{ id: string; label: string }[]> {
-        const logger = this.app.log.child({module: 'CatalogItemService.searchRole', input});
+    async searchCatalog(input: SearchCatalogRequestDto): Promise<{ id: string; label: string }[]> {
+        const logger = this.app.log.child({module: 'CatalogItemService.searchCatalog', input});
 
         const {q, category, limit = 10} = input;
         const normalizedQuery = this.normalizeQuery(q);
@@ -32,15 +32,15 @@ export class CatalogItemService {
             return [];
         }
 
-        const cacheKey = `roles:${category ?? 'any'}:${normalizedQuery ?? 'none'}:${limit}`;
+        const cacheKey = `catalog:${category ?? 'any'}:${normalizedQuery ?? 'none'}:${limit}`;
 
         // Cache lookup
         const cached = await this.cache?.get<{ id: string; label: string }[]>(cacheKey);
         if (cached) {
-            logger.debug('Roles search cache hit', {cacheKey});
+            logger.debug('Catalog search cache hit', {cacheKey});
             return cached;
         }
-        logger.debug('Roles search cache miss', {cacheKey});
+        logger.debug('Catalog search cache miss', {cacheKey});
 
         // Call CatalogItem Backend
         const backendResponse = await this.catalogItemRepository.searchByCategory(

@@ -32,6 +32,17 @@ const professionalSearchBodySchema = z.object({
     limit: z.number().min(1).max(50).default(10),
 });
 
+const professionalInviteCreateSchema = z.object({
+    teamId: z.string().min(1),
+    email: z.string().email(),
+    sentByUserId: z.string().min(1),
+});
+
+const professionalInviteAcceptSchema = z.object({
+    token: z.string().min(1),
+    acceptedByProfessionalId: z.string().optional(),
+});
+
 /* =====================
    Response
 ===================== */
@@ -53,6 +64,19 @@ const suggestProfessionalViewSchema = z.object({
         .nullable(),
 });
 
+const professionalInviteResponseSchema = z.object({
+    id: z.string(),
+    teamId: z.string(),
+    email: z.string().email(),
+    status: z.string(),
+    sentAt: z.string().datetime().nullable().optional(),
+    expiresAt: z.string().datetime().nullable().optional(),
+    sentByUserId: z.string().optional(),
+    acceptedAt: z.string().datetime().nullable().optional(),
+    acceptedByProfessionalId: z.string().nullable().optional(),
+    token: z.string(),
+});
+
 const suggestProfessionalResponseSchema =
     z.array(suggestProfessionalViewSchema);
 
@@ -68,6 +92,18 @@ export type ProfessionalSearchResponseSchemaType = z.infer<
     typeof suggestProfessionalResponseSchema
 >;
 
+export type ProfessionalInviteCreateRequestType = z.infer<
+    typeof professionalInviteCreateSchema
+>;
+
+export type ProfessionalInviteAcceptRequestType = z.infer<
+    typeof professionalInviteAcceptSchema
+>;
+
+export type ProfessionalInviteResponseType = z.infer<
+    typeof professionalInviteResponseSchema
+>;
+
 /* =====================
    Build schemas
 ===================== */
@@ -76,6 +112,9 @@ const {schemas: professionalSearchSchemas, $ref} = buildJsonSchemas(
     {
         professionalSearchBodySchema,
         suggestProfessionalResponseSchema,
+        professionalInviteCreateSchema,
+        professionalInviteAcceptSchema,
+        professionalInviteResponseSchema,
     },
     {$id: "professionalSearchSchemas"}
 );
@@ -91,5 +130,28 @@ export const ProfessionalSearchSchema = {
     body: $ref("professionalSearchBodySchema"),
     response: {
         200: $ref("suggestProfessionalResponseSchema"),
+    },
+};
+
+export const ProfessionalInviteCreateSchema = {
+    tags: ["professionals"],
+    body: $ref("professionalInviteCreateSchema"),
+    response: {
+        200: $ref("professionalInviteResponseSchema"),
+    },
+};
+
+export const ProfessionalInviteValidateSchema = {
+    tags: ["professionals"],
+    response: {
+        200: $ref("professionalInviteResponseSchema"),
+    },
+};
+
+export const ProfessionalInviteAcceptSchema = {
+    tags: ["professionals"],
+    body: $ref("professionalInviteAcceptSchema"),
+    response: {
+        200: $ref("professionalInviteResponseSchema"),
     },
 };
