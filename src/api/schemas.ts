@@ -4,6 +4,9 @@ import {
     professionalSearchSchemas,
     catalogSearchByCategorySchemas,
     authSchemas,
+    teamSchemas,
+    teamDraftSchemas,
+    teamSlotSchemas,
 } from '~/api/index';
 
 /**
@@ -20,6 +23,9 @@ export const initSchemas = async (app: FastifyInstance) => {
         ...catalogSearchByCategorySchemas,
         ...professionalSearchSchemas,
         ...authSchemas,
+        ...teamSchemas,
+        ...teamDraftSchemas,
+        ...teamSlotSchemas,
     ];
     for (const schema of schemas) {
         app.addSchema(schema);

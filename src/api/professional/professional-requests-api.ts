@@ -34,6 +34,7 @@ const professionalSearchBodySchema = z.object({
 
 const professionalInviteCreateSchema = z.object({
     teamId: z.string().min(1),
+    slotId: z.string().min(1),
     email: z.string().email(),
     sentByUserId: z.string().min(1),
 });
@@ -67,6 +68,7 @@ const suggestProfessionalViewSchema = z.object({
 const professionalInviteResponseSchema = z.object({
     id: z.string(),
     teamId: z.string(),
+    slotId: z.string(),
     email: z.string().email(),
     status: z.string(),
     sentAt: z.string().datetime().nullable().optional(),

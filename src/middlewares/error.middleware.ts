@@ -12,10 +12,7 @@ export async function errorHandler(app: FastifyInstance) {
 
     if (error instanceof AxiosError) {
       const backendStatus = error.response?.status ?? error.status;
-      const status =
-        backendStatus === StatusCodes.NOT_FOUND
-          ? StatusCodes.BAD_REQUEST
-          : backendStatus;
+      const status = backendStatus;
       responseError = new ApiError(
         ErrorKeys.CUSTOM_ERROR,
         `[${request.method}] ${request.url} - ${error.message}`,

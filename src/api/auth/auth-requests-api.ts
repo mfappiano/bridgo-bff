@@ -20,6 +20,7 @@ const authMeUpdateSchema = z
 const authResponseSchema = z.any();
 
 const meResponseSchema = z.object({
+  id: z.string().optional(),
   email: z.string(),
   provider: z.string(),
   roles: z.array(z.string()),
