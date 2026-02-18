@@ -32,7 +32,16 @@ export const teamSlotResponseSchema = z.object({
 export const teamSlotAssignSchema = z.object({
     professionalId: z.string().optional(),
     inviteId: z.string().optional(),
+    startDate: z.string().optional(),
+    endDate: z.string().optional(),
 });
+
+export const teamSlotAssignmentUpdateSchema = z.object({
+    startDate: z.string().optional(),
+    endDate: z.string().optional(),
+});
+
+export const teamSlotAssignmentCancelResponseSchema = z.null();
 
 export const teamSlotUpdateSchema = z.object({
     required: z.boolean().optional(),
@@ -50,6 +59,12 @@ export const teamSlotAssignmentResponseSchema = z.object({
     assignedAt: z.string().datetime().optional(),
     status: assignmentStatusEnum.nullable().optional(),
     email: z.string().email().optional(),
+    firstName: z.string().optional(),
+    lastName: z.string().optional(),
+    displayName: z.string().optional(),
+    inviteType: z.string().optional(),
+    startDate: z.string().nullable().optional(),
+    endDate: z.string().nullable().optional(),
 });
 
 export const teamSlotWhitAssignmentsResponseSchema = z.object({
@@ -70,5 +85,6 @@ export type TeamSlotResponseType = z.infer<typeof teamSlotResponseSchema>;
 export type TeamSlotCreateRequestType = z.infer<typeof teamSlotCreateSchema>;
 export type TeamSlotUpdateRequestType = z.infer<typeof teamSlotUpdateSchema>;
 export type TeamSlotAssignRequestType = z.infer<typeof teamSlotAssignSchema>;
+export type TeamSlotAssignmentUpdateRequestType = z.infer<typeof teamSlotAssignmentUpdateSchema>;
 export type TeamSlotAssignmentResponseType = z.infer<typeof teamSlotAssignmentResponseSchema>;
 export type TeamSlotWhitAssignmentsResponseType = z.infer<typeof teamSlotWhitAssignmentsResponseSchema>;

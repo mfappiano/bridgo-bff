@@ -4,6 +4,9 @@ import {
     teamSlotResponseSchema,
     teamSlotAssignSchema,
     teamSlotUpdateSchema,
+    teamSlotAssignmentCancelResponseSchema,
+    teamSlotAssignmentResponseSchema,
+    teamSlotAssignmentUpdateSchema,
 } from "./team-slot.model";
 
 const { schemas: teamSlotSchemas, $ref } = buildJsonSchemas(
@@ -12,6 +15,9 @@ const { schemas: teamSlotSchemas, $ref } = buildJsonSchemas(
         teamSlotResponseSchema,
         teamSlotAssignSchema,
         teamSlotUpdateSchema,
+        teamSlotAssignmentCancelResponseSchema,
+        teamSlotAssignmentResponseSchema,
+        teamSlotAssignmentUpdateSchema,
     },
     { $id: "teamSlotHttpSchema" }
 );
@@ -38,7 +44,7 @@ export const TeamSlotAssignSchema = {
     tags: ["teams"],
     body: $ref("teamSlotAssignSchema"),
     response: {
-        200: $ref("teamSlotResponseSchema"),
+        200: $ref("teamSlotAssignmentResponseSchema"),
     },
 };
 
@@ -46,5 +52,20 @@ export const TeamSlotVacateSchema = {
     tags: ["teams"],
     response: {
         200: $ref("teamSlotResponseSchema"),
+    },
+};
+
+export const TeamSlotAssignmentCancelSchema = {
+    tags: ["teams"],
+    response: {
+        204: $ref("teamSlotAssignmentCancelResponseSchema"),
+    },
+};
+
+export const TeamSlotAssignmentUpdateSchema = {
+    tags: ["teams"],
+    body: $ref("teamSlotAssignmentUpdateSchema"),
+    response: {
+        200: $ref("teamSlotAssignmentResponseSchema"),
     },
 };

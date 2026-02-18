@@ -7,7 +7,9 @@ import { ArchiveTeamUseCase } from "~/modules/team/useCases/archiveTeam.UserCase
 import { CreateTeamSlotUseCase } from "~/modules/team/useCases/createTeamSlot.UserCase";
 import { UpdateTeamSlotUseCase } from "~/modules/team/useCases/updateTeamSlot.UserCase";
 import { AssignTeamSlotUseCase } from "~/modules/team/useCases/assignTeamSlot.UserCase";
+import { UpdateTeamSlotAssignmentUseCase } from "~/modules/team/useCases/updateTeamSlotAssignment.UserCase";
 import { VacateTeamSlotUseCase } from "~/modules/team/useCases/vacateTeamSlot.UserCase";
+import { CancelTeamSlotAssignmentUseCase } from "~/modules/team/useCases/cancelTeamSlotAssignment.UserCase";
 import {
     TeamPublishSchema,
     TeamArchiveSchema,
@@ -15,13 +17,17 @@ import {
     TeamSlotCreateSchema,
     TeamSlotUpdateSchema,
     TeamSlotVacateSchema,
+    TeamSlotAssignmentCancelSchema,
+    TeamSlotAssignmentUpdateSchema,
     TeamUpdateSchema
 } from "~/api";
 import {TeamResponseType, TeamUpdateRequestType} from "~/api/team/team.model";
 import {
     TeamSlotAssignRequestType,
+    TeamSlotAssignmentResponseType,
     TeamSlotCreateRequestType,
     TeamSlotResponseType,
+    TeamSlotAssignmentUpdateRequestType,
     TeamSlotUpdateRequestType
 } from "~/api/team-slot/team-slot.model";
 
@@ -49,6 +55,12 @@ export default class TeamController {
 
     @Inject(VacateTeamSlotUseCase)
     private readonly vacateTeamSlotUseCase!: VacateTeamSlotUseCase;
+
+    @Inject(CancelTeamSlotAssignmentUseCase)
+    private readonly cancelTeamSlotAssignmentUseCase!: CancelTeamSlotAssignmentUseCase;
+
+    @Inject(UpdateTeamSlotAssignmentUseCase)
+    private readonly updateTeamSlotAssignmentUseCase!: UpdateTeamSlotAssignmentUseCase;
 
     @PATCH({
         url: "/:teamId",
@@ -146,7 +158,7 @@ export default class TeamController {
         request: FastifyRequest<{
             Params: { teamId: string; slotId: string };
             Body: TeamSlotAssignRequestType;
-            Reply: TeamSlotResponseType;
+            Reply: TeamSlotAssignmentResponseType;
         }>,
         reply: FastifyReply
     ) {
@@ -172,6 +184,45 @@ export default class TeamController {
         const result = await this.vacateTeamSlotUseCase.execute(
             request.params.teamId,
             request.params.slotId
+        );
+        return reply.status(200).send(result);
+    }
+
+    @POST({
+        url: "/:teamId/slots/:slotId/assignments/:assignmentId",
+        options: { schema: TeamSlotAssignmentCancelSchema },
+    })
+    async cancelAssignment(
+        request: FastifyRequest<{
+            Params: { teamId: string; slotId: string; assignmentId: string };
+        }>,
+        reply: FastifyReply
+    ) {
+        await this.cancelTeamSlotAssignmentUseCase.execute(
+            request.params.teamId,
+            request.params.slotId,
+            request.params.assignmentId
+        );
+        return reply.status(204).send();
+    }
+
+    @PATCH({
+        url: "/:teamId/slots/:slotId/assignments/:assignmentId",
+        options: { schema: TeamSlotAssignmentUpdateSchema },
+    })
+    async updateAssignment(
+        request: FastifyRequest<{
+            Params: { teamId: string; slotId: string; assignmentId: string };
+            Body: TeamSlotAssignmentUpdateRequestType;
+            Reply: TeamSlotAssignmentResponseType;
+        }>,
+        reply: FastifyReply
+    ) {
+        const result = await this.updateTeamSlotAssignmentUseCase.execute(
+            request.params.teamId,
+            request.params.slotId,
+            request.params.assignmentId,
+            request.body
         );
         return reply.status(200).send(result);
     }

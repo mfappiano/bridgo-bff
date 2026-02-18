@@ -5,6 +5,7 @@ export const SuggestProfessionalViewSchema = z.object({
     id: z.string().uuid(),
     name: z.string(),
     lastName: z.string(),
+    email: z.string().email().optional(),
     healthProfile: z
         .object({
             license: z

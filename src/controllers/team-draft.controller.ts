@@ -36,9 +36,9 @@ export default class TeamDraftController {
         }>,
         reply: FastifyReply
     ) {
-        const { type } = request.query;
+        const { type, category } = request.query;
 
-        const result = await this.getCurrentDraftUseCase.execute({ type });
+        const result = await this.getCurrentDraftUseCase.execute({ type, category });
 
         return reply.status(200).send(result);
     }

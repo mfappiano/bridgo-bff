@@ -31,7 +31,7 @@ export const teamProgressResponseSchema = z.object({
     pendingInvites: z.number().int(),
     activeAssignments: z.number().int(),
     rejectedInvites: z.number().int(),
-    completionPercentage: z.number().int(),
+    completionPercentage: z.number().min(0).max(100)
 });
 
 export type TeamResponseType = z.infer<typeof teamResponseSchema>;

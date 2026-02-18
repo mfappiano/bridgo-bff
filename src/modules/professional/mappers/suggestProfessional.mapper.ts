@@ -11,6 +11,7 @@ export class SuggestProfessionalMapper {
                 id: p.id,
                 name: p.firstName,
                 lastName: p.lastName,
+                email: p.email ?? undefined,
                 healthProfile: license
                     ? {
                         license: {

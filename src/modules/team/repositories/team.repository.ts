@@ -15,6 +15,8 @@ import {
 import {
     TeamSlotAssignRequestType,
     TeamSlotCreateRequestType,
+    TeamSlotAssignmentResponseType,
+    TeamSlotAssignmentUpdateRequestType,
     TeamSlotResponseType,
     TeamSlotUpdateRequestType
 } from "~/api/team-slot/team-slot.model";
@@ -75,14 +77,29 @@ export class TeamRepository implements ITeamRepository {
         teamId: string,
         slotId: string,
         payload: TeamSlotAssignRequestType
-    ): Promise<TeamSlotResponseType> {
+    ): Promise<TeamSlotAssignmentResponseType> {
         const logger = this.app.log.child({ module: "TeamRepository.assignSlot" });
         logger.debug("Assigning team slot");
         const { data } = await this.httpClient.post(
             `${this.baseUrl}/${teamId}/slots/${slotId}/assign`,
             payload
         );
-        return data as TeamSlotResponseType;
+        return data as TeamSlotAssignmentResponseType;
+    }
+
+    async updateAssignment(
+        teamId: string,
+        slotId: string,
+        assignmentId: string,
+        payload: TeamSlotAssignmentUpdateRequestType
+    ): Promise<TeamSlotAssignmentResponseType> {
+        const logger = this.app.log.child({ module: "TeamRepository.updateAssignment" });
+        logger.debug("Updating team slot assignment");
+        const { data } = await this.httpClient.patch(
+            `${this.baseUrl}/${teamId}/slots/${slotId}/assignments/${assignmentId}`,
+            payload
+        );
+        return data as TeamSlotAssignmentResponseType;
     }
 
     async vacateSlot(teamId: string, slotId: string): Promise<TeamSlotResponseType> {
@@ -94,10 +111,25 @@ export class TeamRepository implements ITeamRepository {
         return data as TeamSlotResponseType;
     }
 
+    async cancelAssignment(
+        teamId: string,
+        slotId: string,
+        assignmentId: string
+    ): Promise<void> {
+        const logger = this.app.log.child({ module: "TeamRepository.cancelAssignment" });
+        logger.debug("Cancelling team slot assignment");
+        await this.httpClient.post(
+            `${this.baseUrl}/${teamId}/slots/${slotId}/assignments/${assignmentId}`
+        );
+    }
+
     async getCurrentDraft(payload: TeamDraftGetCurrentRequestType): Promise<TeamSnapshotResponseType> {
         const logger = this.app.log.child({ module: "TeamRepository.getCurrentDraft" });
         logger.debug("Getting current team draft");
-        const { data } = await this.httpClient.get(`${this.baseUrl}/drafts/current`, { type: payload.type });
+        const { data } = await this.httpClient.get(`${this.baseUrl}/drafts/current`, {
+            type: payload.type,
+            category: payload.category,
+        });
         return data as TeamSnapshotResponseType;
     }
 

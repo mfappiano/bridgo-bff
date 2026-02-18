@@ -17,6 +17,17 @@ export class GetCurrentDraftUseCase {
             payload,
         });
         logger.info("Getting team draft");
-        return this.teamRepository.getCurrentDraft(payload);
+        const result = await this.teamRepository.getCurrentDraft(payload);
+        const completion = result?.progress?.completionPercentage;
+        if (completion === null || completion === undefined || !Number.isFinite(completion)) {
+            return {
+                ...result,
+                progress: {
+                    ...result.progress,
+                    completionPercentage: 0,
+                },
+            };
+        }
+        return result;
     }
 }

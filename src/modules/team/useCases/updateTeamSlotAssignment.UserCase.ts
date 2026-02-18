@@ -2,12 +2,12 @@ import { FastifyInstance } from "fastify";
 import { FastifyInstanceToken, Inject, Service } from "fastify-decorators";
 import { TeamRepository } from "~/modules/team/repositories/team.repository";
 import {
-    TeamSlotAssignRequestType,
-    TeamSlotAssignmentResponseType
+    TeamSlotAssignmentResponseType,
+    TeamSlotAssignmentUpdateRequestType
 } from "~/api/team-slot/team-slot.model";
 
 @Service()
-export class AssignTeamSlotUseCase {
+export class UpdateTeamSlotAssignmentUseCase {
     @Inject(FastifyInstanceToken)
     private readonly app!: FastifyInstance;
 
@@ -17,14 +17,16 @@ export class AssignTeamSlotUseCase {
     async execute(
         teamId: string,
         slotId: string,
-        payload: TeamSlotAssignRequestType
+        assignmentId: string,
+        payload: TeamSlotAssignmentUpdateRequestType
     ): Promise<TeamSlotAssignmentResponseType> {
         const logger = this.app.log.child({
-            useCase: "AssignTeamSlotUseCase",
+            useCase: "UpdateTeamSlotAssignmentUseCase",
             teamId,
             slotId,
+            assignmentId,
         });
-        logger.info("Assigning team slot");
-        return this.teamRepository.assignSlot(teamId, slotId, payload);
+        logger.info("Updating team slot assignment");
+        return this.teamRepository.updateAssignment(teamId, slotId, assignmentId, payload);
     }
 }

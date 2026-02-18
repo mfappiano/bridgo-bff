@@ -4,7 +4,7 @@ import { z } from "zod";
  * Enums
  */
 export const ProfessionalCategorySchema = z.enum([
-    "HEALTHCARE",
+    "HEALTHCARE", "IT"
 ]);
 
 export const VerificationStatusSchema = z.enum([
@@ -22,6 +22,8 @@ export const LicenseInfoSchema = z.object({
  */
 export const ProfessionalItemSchema = z.object({
     id: z.string().uuid(),
+    userId: z.string().uuid().nullable().optional(),
+    email: z.string().email().nullable().optional(),
 
     firstName: z.string(),
     lastName: z.string(),
@@ -36,7 +38,7 @@ export const ProfessionalItemSchema = z.object({
 
     healthProfile: z.object({
         license: LicenseInfoSchema.nullable(),
-    }),
+    }).nullable(),
 });
 
 export const SearchProfessionalsResponseSchema = z.object({

@@ -36,6 +36,10 @@ const professionalInviteCreateSchema = z.object({
     teamId: z.string().min(1),
     slotId: z.string().min(1),
     email: z.string().email(),
+    firstName: z.string().min(1),
+    lastName: z.string().min(1),
+    inviteType: z.string().optional(),
+    assignmentId: z.string().optional(),
     sentByUserId: z.string().min(1),
 });
 
@@ -52,6 +56,7 @@ const suggestProfessionalViewSchema = z.object({
     id: z.string().uuid(),
     name: z.string(),
     lastName: z.string(),
+    email: z.string().email().optional(),
     healthProfile: z
         .object({
             license: z
@@ -70,6 +75,9 @@ const professionalInviteResponseSchema = z.object({
     teamId: z.string(),
     slotId: z.string(),
     email: z.string().email(),
+    firstName: z.string().optional(),
+    lastName: z.string().optional(),
+    inviteType: z.string().optional(),
     status: z.string(),
     sentAt: z.string().datetime().nullable().optional(),
     expiresAt: z.string().datetime().nullable().optional(),

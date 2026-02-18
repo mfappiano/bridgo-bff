@@ -39,6 +39,7 @@ export const teamSnapshotResponseSchema = z.object({
 
 export const teamDraftGetCurrentQuerySchema = z.object({
     type: teamTypeEnum.optional(),
+    category: z.string().optional(),
 });
 
 export type TeamDraftCreateRequestType = z.infer<typeof teamDraftCreateSchema>;
