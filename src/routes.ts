@@ -4,6 +4,8 @@ import HealthController from './controllers/health.controller';
 import ProfessionalController from "~/controllers/professional.controller";
 import AuthController from "~/controllers/auth.controller";
 import CatalogController from "~/controllers/catalog.controller";
+import TeamController from "~/controllers/team.controller";
+import TeamDraftController from "~/controllers/team-draft.controller";
 
 function initRoutes(app: FastifyInstance) {
     app.register(bootstrap, {
@@ -12,6 +14,8 @@ function initRoutes(app: FastifyInstance) {
             HealthController,
             ProfessionalController,
             AuthController,
+            TeamController,
+            TeamDraftController,
         ],
     });
 }

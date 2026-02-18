@@ -22,6 +22,8 @@ export function initPlugins(app: FastifyInstance) {
   app.register(cors, {
     origin: corsOrigins.length === 0 ? false : corsOrigins,
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
   });
   app.register(fastifyRequestContext, initContext());
   app.register(cookie, {} as FastifyCookieOptions);
