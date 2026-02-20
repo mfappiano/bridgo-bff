@@ -1,4 +1,5 @@
 import { z } from "zod";
+import {teamSlotAssignmentResponseSchema, teamSlotWhitAssignmentsResponseSchema} from "~/api/team-slot/team-slot.model";
 
 export const teamTypeEnum = z.enum(["PLANNED", "EXISTING"]);
 
@@ -34,6 +35,27 @@ export const teamProgressResponseSchema = z.object({
     completionPercentage: z.number().min(0).max(100)
 });
 
+export const teamResultResponseSchema = z.object({
+    team: teamResponseSchema, // todos los campos del equipo
+    slots: z.array(teamSlotWhitAssignmentsResponseSchema)
+});
+
+export const paginatedTeamResponseSchema = z.object({
+    contexts: z.array(teamResultResponseSchema),
+    page: z.number().int(),
+    size: z.number().int(),
+    totalElements: z.number().int(),
+    totalPages: z.number().int(),
+});
+
+export const paginatedTeamRequestQuerySchema = z.object({
+    page: z.number().int(),
+    size: z.number().int(),
+});
+
 export type TeamResponseType = z.infer<typeof teamResponseSchema>;
 export type TeamUpdateRequestType = z.infer<typeof teamUpdateSchema>;
 export type TeamProgressResponseType = z.infer<typeof teamProgressResponseSchema>;
+export type TeamResultResponseType = z.infer<typeof teamResultResponseSchema>;
+export type PaginatedTeamResponseType = z.infer<typeof paginatedTeamResponseSchema>;
+export type PaginatedTeamRequestQueryType = z.infer<typeof paginatedTeamRequestQuerySchema>;

@@ -58,7 +58,6 @@ export const teamSlotAssignmentResponseSchema = z.object({
     inviteId: z.string().optional(),
     assignedAt: z.string().datetime().optional(),
     status: assignmentStatusEnum.nullable().optional(),
-    email: z.string().email().optional(),
     firstName: z.string().optional(),
     lastName: z.string().optional(),
     displayName: z.string().optional(),
