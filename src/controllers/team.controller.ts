@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { Controller, Inject, PATCH, POST } from "fastify-decorators";
+import {Controller, GET, Inject, PATCH, POST} from "fastify-decorators";
 import { CreateTeamDraftUseCase } from "~/modules/team/useCases/createTeamDraft.UserCase";
 import { UpdateTeamUseCase } from "~/modules/team/useCases/updateTeam.UserCase";
 import { PublishTeamUseCase } from "~/modules/team/useCases/publishTeam.UserCase";
@@ -19,9 +19,14 @@ import {
     TeamSlotVacateSchema,
     TeamSlotAssignmentCancelSchema,
     TeamSlotAssignmentUpdateSchema,
-    TeamUpdateSchema
+    TeamUpdateSchema, PaginatedTeamResponseSchema
 } from "~/api";
-import {TeamResponseType, TeamUpdateRequestType} from "~/api/team/team.model";
+import {
+    PaginatedTeamRequestQueryType,
+    PaginatedTeamResponseType,
+    TeamResponseType,
+    TeamUpdateRequestType
+} from "~/api/team/team.model";
 import {
     TeamSlotAssignRequestType,
     TeamSlotAssignmentResponseType,
@@ -30,6 +35,8 @@ import {
     TeamSlotAssignmentUpdateRequestType,
     TeamSlotUpdateRequestType
 } from "~/api/team-slot/team-slot.model";
+import {GetAllTeamUseCase} from "~/modules/team/useCases/getAllTeamUseCase";
+import {TeamDraftGetCurrentRequestType, TeamSnapshotResponseType} from "~/api/team-draft/team-draft.model";
 
 @Controller({ route: "/teams" })
 export default class TeamController {
@@ -61,6 +68,9 @@ export default class TeamController {
 
     @Inject(UpdateTeamSlotAssignmentUseCase)
     private readonly updateTeamSlotAssignmentUseCase!: UpdateTeamSlotAssignmentUseCase;
+
+    @Inject(GetAllTeamUseCase)
+    private readonly getAllTeamUseCase!: GetAllTeamUseCase;
 
     @PATCH({
         url: "/:teamId",
@@ -224,6 +234,23 @@ export default class TeamController {
             request.params.assignmentId,
             request.body
         );
+        return reply.status(200).send(result);
+    }
+
+    @GET({
+        url: "",
+        options: { schema: PaginatedTeamResponseSchema },
+    })
+    async getAllTeamByUser(
+        request: FastifyRequest<{
+            Querystring: PaginatedTeamRequestQueryType;
+            Reply: PaginatedTeamResponseType;
+        }>,
+        reply: FastifyReply
+    ) {
+        const { page = 0, size = 10 } = request.query;
+        const result = await this.getAllTeamUseCase.execute( { page, size } );
+        console.log(result)
         return reply.status(200).send(result);
     }
 }

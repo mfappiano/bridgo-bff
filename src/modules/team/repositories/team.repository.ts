@@ -9,6 +9,8 @@ import {
     TeamSnapshotResponseType
 } from "~/api/team-draft/team-draft.model";
 import {
+    PaginatedTeamRequestQueryType,
+    PaginatedTeamResponseType,
     TeamResponseType,
     TeamUpdateRequestType,
 } from "~/api/team/team.model";
@@ -138,5 +140,15 @@ export class TeamRepository implements ITeamRepository {
         logger.debug("Archiving team");
         const { data } = await this.httpClient.post(`${this.baseUrl}/${teamId}/archive`);
         return data as TeamResponseType;
+    }
+
+    async getAllTeamByUser(payload: PaginatedTeamRequestQueryType): Promise<PaginatedTeamResponseType> {
+        const logger = this.app.log.child({module: "TeamRepository.getAllTeamByUser"});
+        logger.debug("Getting all teams by user");
+        const {data} = await this.httpClient.get(`${this.baseUrl}`, {
+            page: payload.page,
+            size: payload.size,
+        });
+        return data as PaginatedTeamResponseType;
     }
 }

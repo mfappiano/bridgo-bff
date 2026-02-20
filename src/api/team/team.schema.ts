@@ -1,15 +1,16 @@
-import { buildJsonSchemas } from "fastify-zod";
-import { teamResponseSchema, teamUpdateSchema } from "./team.model";
+import {buildJsonSchemas} from "fastify-zod";
+import {paginatedTeamResponseSchema, teamResponseSchema, teamUpdateSchema} from "./team.model";
 
-const { schemas: teamSchemas, $ref } = buildJsonSchemas(
+const {schemas: teamSchemas, $ref} = buildJsonSchemas(
     {
         teamResponseSchema,
         teamUpdateSchema,
+        paginatedTeamResponseSchema
     },
-    { $id: "teamHttpSchema" }
+    {$id: "teamHttpSchema"}
 );
 
-export { teamSchemas };
+export {teamSchemas};
 
 export const TeamUpdateSchema = {
     tags: ["teams"],
@@ -30,5 +31,12 @@ export const TeamArchiveSchema = {
     tags: ["teams"],
     response: {
         200: $ref("teamResponseSchema"),
+    },
+};
+
+export const PaginatedTeamResponseSchema = {
+    tags: ["teams"],
+    response: {
+        200: $ref("paginatedTeamResponseSchema"),
     },
 };
