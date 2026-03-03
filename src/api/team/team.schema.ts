@@ -1,10 +1,11 @@
 import {buildJsonSchemas} from "fastify-zod";
-import {paginatedTeamResponseSchema, teamResponseSchema, teamUpdateSchema} from "./team.model";
+import {paginatedTeamResponseSchema, teamPublishBodySchema, teamResponseSchema, teamUpdateSchema} from "./team.model";
 
 const {schemas: teamSchemas, $ref} = buildJsonSchemas(
     {
         teamResponseSchema,
         teamUpdateSchema,
+        teamPublishBodySchema,
         paginatedTeamResponseSchema
     },
     {$id: "teamHttpSchema"}
@@ -22,6 +23,7 @@ export const TeamUpdateSchema = {
 
 export const TeamPublishSchema = {
     tags: ["teams"],
+    body: $ref("teamPublishBodySchema"),
     response: {
         200: $ref("teamResponseSchema"),
     },

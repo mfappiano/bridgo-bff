@@ -48,6 +48,10 @@ const professionalInviteAcceptSchema = z.object({
     acceptedByProfessionalId: z.string().optional(),
 });
 
+const professionalInviteRejectSchema = z.object({
+    token: z.string().min(1),
+});
+
 /* =====================
    Response
 ===================== */
@@ -72,9 +76,9 @@ const suggestProfessionalViewSchema = z.object({
 
 const professionalInviteResponseSchema = z.object({
     id: z.string(),
-    teamId: z.string(),
-    slotId: z.string(),
-    email: z.string().email(),
+    teamId: z.string().nullable().optional(),
+    slotId: z.string().nullable().optional(),
+    email: z.string().email().nullable().optional(),
     firstName: z.string().optional(),
     lastName: z.string().optional(),
     inviteType: z.string().optional(),
@@ -86,6 +90,8 @@ const professionalInviteResponseSchema = z.object({
     acceptedByProfessionalId: z.string().nullable().optional(),
     token: z.string(),
 });
+
+const professionalInvitePendingListSchema = z.array(professionalInviteResponseSchema);
 
 const suggestProfessionalResponseSchema =
     z.array(suggestProfessionalViewSchema);
@@ -124,7 +130,9 @@ const {schemas: professionalSearchSchemas, $ref} = buildJsonSchemas(
         suggestProfessionalResponseSchema,
         professionalInviteCreateSchema,
         professionalInviteAcceptSchema,
+        professionalInviteRejectSchema,
         professionalInviteResponseSchema,
+        professionalInvitePendingListSchema,
     },
     {$id: "professionalSearchSchemas"}
 );
@@ -163,5 +171,20 @@ export const ProfessionalInviteAcceptSchema = {
     body: $ref("professionalInviteAcceptSchema"),
     response: {
         200: $ref("professionalInviteResponseSchema"),
+    },
+};
+
+export const ProfessionalInviteRejectSchema = {
+    tags: ["professionals"],
+    body: $ref("professionalInviteRejectSchema"),
+    response: {
+        200: $ref("professionalInviteResponseSchema"),
+    },
+};
+
+export const ProfessionalInvitePendingSchema = {
+    tags: ["professionals"],
+    response: {
+        200: $ref("professionalInvitePendingListSchema"),
     },
 };

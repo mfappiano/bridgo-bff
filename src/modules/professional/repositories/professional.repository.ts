@@ -103,4 +103,27 @@ export class ProfessionalRepository implements IProfessionalRepository {
         );
         return data as ProfessionalInviteResponseType;
     }
+
+    async rejectInvite(payload: { token: string }): Promise<ProfessionalInviteResponseType> {
+        const logger = this.app.log.child({
+            module: 'ProfessionalRepository.rejectInvite',
+        });
+
+        logger.debug('Rejecting professional invite');
+        const { data } = await this.httpClient.post(
+            `${this.baseUrl}/invites/reject`,
+            payload
+        );
+        return data as ProfessionalInviteResponseType;
+    }
+
+    async getPendingInvites(): Promise<ProfessionalInviteResponseType[]> {
+        const logger = this.app.log.child({
+            module: 'ProfessionalRepository.getPendingInvites',
+        });
+
+        logger.debug('Getting pending invites');
+        const { data } = await this.httpClient.get(`${this.baseUrl}/invites/pending`);
+        return (Array.isArray(data) ? data : []) as ProfessionalInviteResponseType[];
+    }
 }
