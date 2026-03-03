@@ -98,11 +98,15 @@ export default class TeamController {
     async publish(
         request: FastifyRequest<{
             Params: { teamId: string };
+            Body?: { associateAsPatient?: boolean };
             Reply: TeamResponseType;
         }>,
         reply: FastifyReply
     ) {
-        const result = await this.publishTeamUseCase.execute(request.params.teamId);
+        const result = await this.publishTeamUseCase.execute(
+            request.params.teamId,
+            request.body
+        );
         return reply.status(200).send(result);
     }
 

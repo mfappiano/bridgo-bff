@@ -7,6 +7,7 @@ import {
     teamSchemas,
     teamDraftSchemas,
     teamSlotSchemas,
+    patientSchemas,
 } from '~/api/index';
 
 /**
@@ -26,6 +27,7 @@ export const initSchemas = async (app: FastifyInstance) => {
         ...teamSchemas,
         ...teamDraftSchemas,
         ...teamSlotSchemas,
+        ...patientSchemas,
     ];
     for (const schema of schemas) {
         app.addSchema(schema);

@@ -5,4 +5,5 @@ export * from '~/api/auth';
 export * from '~/api/team';
 export * from '~/api/team-slot';
 export * from '~/api/team-draft';
+export * from '~/api/patient';
 export { initSchemas } from '~/api/schemas';

@@ -21,6 +21,7 @@ export interface ITeamRepository {
     createDraft(payload: TeamDraftCreateRequestType): Promise<TeamResponseType>;
     updateTeam(teamId: string, payload: TeamUpdateRequestType): Promise<TeamResponseType>;
     publishTeam(teamId: string): Promise<TeamResponseType>;
+    associateTeamWithPatient(teamId: string, patientId: string): Promise<void>;
     createSlot(teamId: string, payload: TeamSlotCreateRequestType): Promise<TeamSlotResponseType>;
     updateSlot(teamId: string, slotId: string, payload: TeamSlotUpdateRequestType): Promise<TeamSlotResponseType>;
     assignSlot(teamId: string, slotId: string, payload: TeamSlotAssignRequestType): Promise<TeamSlotAssignmentResponseType>;

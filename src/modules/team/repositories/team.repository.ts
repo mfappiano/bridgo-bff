@@ -54,6 +54,12 @@ export class TeamRepository implements ITeamRepository {
         return data as TeamResponseType;
     }
 
+    async associateTeamWithPatient(teamId: string, patientId: string): Promise<void> {
+        const logger = this.app.log.child({ module: "TeamRepository.associateTeamWithPatient" });
+        logger.debug("Associating patient with team", { teamId, patientId });
+        await this.httpClient.post(`${this.baseUrl}/${teamId}/patients/${patientId}/link`);
+    }
+
     async createSlot(teamId: string, payload: TeamSlotCreateRequestType): Promise<TeamSlotResponseType> {
         const logger = this.app.log.child({ module: "TeamRepository.createSlot" });
         logger.debug("Creating team slot");

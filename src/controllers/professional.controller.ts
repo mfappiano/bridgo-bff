@@ -7,7 +7,9 @@ import {
     ProfessionalSearchSchema,
     ProfessionalInviteCreateSchema,
     ProfessionalInviteAcceptSchema,
+    ProfessionalInviteRejectSchema,
     ProfessionalInviteValidateSchema,
+    ProfessionalInvitePendingSchema,
     ProfessionalInviteCreateRequestType,
     ProfessionalInviteAcceptRequestType,
     ProfessionalInviteResponseType,
@@ -15,6 +17,8 @@ import {
 import { CreateProfessionalInviteUseCase } from "~/modules/professional/useCases/createProfessionalInvite.UserCase";
 import { ValidateProfessionalInviteUseCase } from "~/modules/professional/useCases/validateProfessionalInvite.UserCase";
 import { AcceptProfessionalInviteUseCase } from "~/modules/professional/useCases/acceptProfessionalInvite.UserCase";
+import { RejectProfessionalInviteUseCase } from "~/modules/professional/useCases/rejectProfessionalInvite.UserCase";
+import { GetPendingInvitesUseCase } from "~/modules/professional/useCases/getPendingInvites.UserCase";
 
 @Controller({ route: "/professionals" })
 export default class ProfessionalController {
@@ -30,6 +34,12 @@ export default class ProfessionalController {
 
     @Inject(AcceptProfessionalInviteUseCase)
     private readonly acceptProfessionalInviteUseCase!: AcceptProfessionalInviteUseCase;
+
+    @Inject(RejectProfessionalInviteUseCase)
+    private readonly rejectProfessionalInviteUseCase!: RejectProfessionalInviteUseCase;
+
+    @Inject(GetPendingInvitesUseCase)
+    private readonly getPendingInvitesUseCase!: GetPendingInvitesUseCase;
 
     @POST({
         url: "/search",
@@ -85,6 +95,20 @@ export default class ProfessionalController {
     }
 
     @GET({
+        url: "/invites/pending",
+        options: {
+            schema: ProfessionalInvitePendingSchema,
+        },
+    })
+    async getPendingInvites(
+        request: FastifyRequest,
+        reply: FastifyReply,
+    ) {
+        const result = await this.getPendingInvitesUseCase.execute();
+        return reply.status(200).send(result);
+    }
+
+    @GET({
         url: "/invites/:token",
         options: {
             schema: ProfessionalInviteValidateSchema,
@@ -118,6 +142,26 @@ export default class ProfessionalController {
         reply: FastifyReply,
     ) {
         const result = await this.acceptProfessionalInviteUseCase.execute(
+            request.body
+        );
+
+        return reply.status(200).send(result);
+    }
+
+    @POST({
+        url: "/invites/reject",
+        options: {
+            schema: ProfessionalInviteRejectSchema,
+        },
+    })
+    async rejectInvite(
+        request: FastifyRequest<{
+            Body: { token: string };
+            Reply: ProfessionalInviteResponseType;
+        }>,
+        reply: FastifyReply,
+    ) {
+        const result = await this.rejectProfessionalInviteUseCase.execute(
             request.body
         );
 

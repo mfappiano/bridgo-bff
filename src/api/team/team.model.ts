@@ -48,6 +48,12 @@ export const paginatedTeamResponseSchema = z.object({
     totalPages: z.number().int(),
 });
 
+export const teamPublishBodySchema = z.object({
+    associateAsPatient: z.boolean().optional(),
+}).optional();
+
+export type TeamPublishBodyType = z.infer<typeof teamPublishBodySchema>;
+
 export const paginatedTeamRequestQuerySchema = z.object({
     page: z.number().int(),
     size: z.number().int(),

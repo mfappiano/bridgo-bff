@@ -13,4 +13,6 @@ export interface IProfessionalRepository {
     createInvite(payload: ProfessionalInviteCreateRequestType): Promise<ProfessionalInviteResponseType>;
     validateInvite(token: string): Promise<ProfessionalInviteResponseType>;
     acceptInvite(payload: ProfessionalInviteAcceptRequestType): Promise<ProfessionalInviteResponseType>;
+    rejectInvite(payload: { token: string }): Promise<ProfessionalInviteResponseType>;
+    getPendingInvites(): Promise<ProfessionalInviteResponseType[]>;
 }
